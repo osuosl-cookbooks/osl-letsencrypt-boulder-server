@@ -84,14 +84,15 @@ ruby_block 'boulder_limit' do
   end
 end
 
-script 'boulder_setup' do
-  interpreter 'bash'
+bash 'boulder_setup' do
+  live_stream true
   cwd boulderdir
   code 'source /etc/profile.d/golang.sh && ./test/setup.sh 2>&1 && touch setup.done'
   creates "#{boulderdir}/setup.done"
 end
 
 bash 'run_boulder' do
+  live_stream true
   cwd boulderdir
   code 'source /etc/profile.d/golang.sh && screen -LdmS boulder ./start.py'
   not_if 'screen -list boulder | /bin/grep 1\ Socket\ in'
