@@ -1,10 +1,16 @@
-# letsencrypt-boulder-server-cookbook
+# Let's Encrypt: Boulder cookbook
 
-TODO: Enter the cookbook description here.
+This is a cookbook for provisioning [**Boulder**][], an
+[ACME-based][acme-spec] CA, written in Go. The Boulder application is an
+official effort of [Let's Encrypt project][letsencrypt].
+
+**Warning:** This cookbook was created for testing other cookbooks, not
+production purposes.
 
 ## Supported Platforms
 
-TODO: List your supported platforms.
+* Ubuntu 14.04
+* Centos 7
 
 ## Attributes
 
@@ -38,5 +44,19 @@ Include `letsencrypt-boulder-server` in your node's `run_list`:
 ```
 
 ## License and Authors
+* Author:: Thijs Houtenbos (@thoutenbos) <thoutenbos@schubergphilis.com>
+* Countributor:: Patrick Connolly (@patcon) <patrickcconnolly@gmail.com>
 
-Author:: Patrick Connolly (patcon) (<patrick.c.connolly@gmail.com>)
+## Sponsors
+
+Code contributions have been generously made by the following
+organizations:
+
+* [Schuberg Philis][schubergphilis] (@thoutenbos)
+* [Blended Perspectives, Inc.][blendive] (@patcon)
+
+[acme-spec]: https://github.com/letsencrypt/acme-spec/
+[letsencrypt]: https://letsencrypt.org/
+[boulder]: https://github.com/letsencrypt/boulder/
+[schubergphilis]: https://www.schubergphilis.com/
+[blendive]: http://www.blendedperspectives.com/
