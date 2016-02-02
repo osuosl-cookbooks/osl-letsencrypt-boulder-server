@@ -61,7 +61,8 @@ ruby_block 'boulder_config' do
   block do
     node['boulder']['config'].keys.each do |filename|
       config = ::JSON.parse ::File.read "#{boulderdir}/test/#{filename}.json"
-      config.merge! node['boulder']['config'][filename]
+      ::File.write("#{boulderdir}/test/#{filename}.json.bak", ::JSON.pretty_generate(config))
+      config = Chef::Mixin::DeepMerge.deep_merge(config, node['boulder']['config'][filename])
       ::File.write("#{boulderdir}/test/#{filename}.json", ::JSON.pretty_generate(config))
     end
   end
