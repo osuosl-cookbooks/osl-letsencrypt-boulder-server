@@ -59,19 +59,11 @@ end
 
 ruby_block 'boulder_config' do
   block do
-    config = ::JSON.parse ::File.read "#{boulderdir}/test/boulder-config.json"
-    config['va']['portConfig']['httpPort'] = 80
-    config['va']['portConfig']['httpsPort'] = 443
-    config['va']['portConfig']['tlsPort'] = 443
-    config['syslog']['network'] = 'udp'
-    config['syslog']['server'] = 'localhost:514'
-    ::File.write("#{boulderdir}/test/boulder-config.json", ::JSON.pretty_generate(config))
-
-    config = ::JSON.parse ::File.read "#{boulderdir}/test/issuer-ocsp-responder.json"
-    config['syslog'] = {}
-    config['syslog']['network'] = 'udp'
-    config['syslog']['server'] = 'localhost:514'
-    ::File.write("#{boulderdir}/test/issuer-ocsp-responder.json", ::JSON.pretty_generate(config))
+    node['boulder']['config'].keys.each do |filename|
+      config = ::JSON.parse ::File.read "#{boulderdir}/test/#{filename}.json"
+      config.merge! node['boulder']['config'][filename]
+      ::File.write("#{boulderdir}/test/#{filename}.json", ::JSON.pretty_generate(config))
+    end
   end
 end
 
