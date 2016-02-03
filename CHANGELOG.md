@@ -1,3 +1,7 @@
+# x.y.z
+
+* Added more specific platform version specification.
+
 # 0.1.1
 
 * Added metadata for Supermarket.
