@@ -1,3 +1,7 @@
+# 0.1.1
+
+* Added metadata for Supermarket.
+
 # 0.1.0
 
 * Initial release of `letsencrypt-boulder-server`, based off
