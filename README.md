@@ -37,6 +37,20 @@ cookbook's attributes to force Boulder onto a different port.
   same server as the webserver, you'll likely want to edit the
 hostsfile. The [`hostfile` cookbook][hostsfile-ckbk] is great for this.
 
+## Development
+
+To tag and publish a new version of this cookbook, first ensure:
+
+* the `metadata.rb` version has been bumped appropriately,
+* the `CHANGELOG.md` has been updated, and
+* all changes have been committed to git.
+
+Once that has been done:
+
+    bundle exec rake publish
+
+This will create a git tag and push a new release to the Supermarket.
+
 ## License and Authors
 * Author:: Thijs Houtenbos (@thoutenbos) <thoutenbos@schubergphilis.com>
 * Countributor:: Patrick Connolly (@patcon) <patrickcconnolly@gmail.com>
