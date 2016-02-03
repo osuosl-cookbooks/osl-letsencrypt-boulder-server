@@ -8,8 +8,8 @@ issues_url       'https://github.com/patcon/chef-letsencrypt-boulder-server/issu
 source_url       'https://github.com/patcon/chef-letsencrypt-boulder-server'
 version          '0.1.1'
 
-supports         'ubuntu'
-supports         'centos'
+supports         'ubuntu', '= 14.04'
+supports         'centos', '~> 7'
 
 depends          'golang'
 depends          'rabbitmq'
