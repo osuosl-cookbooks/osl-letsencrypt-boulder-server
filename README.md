@@ -15,39 +15,27 @@ production purposes.
 
 ## Attributes
 
-|**Key**                                         | **Type**| **Description**                                 |
-|------------------------------------------------|---------|-------------------------------------------------|
-|`['boulder']['config']['boulder-config']`       | Hash    | Deep-merged into JSON config file of same name. |
-|`['boulder']['config']['issuer-ocsp-responder']`| Hash    | Deep-merged into JSON config file of same name. |
+|**Key**                                         | **Type**| **Description**                                    |
+|------------------------------------------------|---------|----------------------------------------------------|
+|`['boulder']['config']['boulder-config']`       | Hash    | Deep-merged into [eponymous config file][config1]. |
+|`['boulder']['config']['issuer-ocsp-responder']`| Hash    | Deep-merged into [eponymous config file][config2]. |
 
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['letsencrypt-boulder-server']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
-  </tr>
-</table>
+## Recipes
 
-## Usage
+### `default`
 
-### letsencrypt-boulder-server::default
+Install and starts the Boulder server.
 
-Include `letsencrypt-boulder-server` in your node's `run_list`:
+## Notes
 
-```json
-{
-  "run_list": [
-    "recipe[letsencrypt-boulder-server::default]"
-  ]
-}
-```
+* Pay close attention to the output of any failed attempts. By default,
+  Boulder tries to use all ports in the range 8000 to 8010, among
+others. If there is a conflict with other applications, you can use this
+cookbook's attributes to force Boulder onto a different port.
+
+* If you're running the boulder server during testing, and it's on the
+  same server as the webserver, you'll likely want to edit the
+hostsfile. The [`hostfile` cookbook][hostsfile-ckbk] is great for this.
 
 ## License and Authors
 * Author:: Thijs Houtenbos (@thoutenbos) <thoutenbos@schubergphilis.com>
@@ -66,3 +54,6 @@ organizations:
 [boulder]: https://github.com/letsencrypt/boulder/
 [schubergphilis]: https://www.schubergphilis.com/
 [blendive]: http://www.blendedperspectives.com/
+[config1]: https://github.com/letsencrypt/boulder/blob/master/test/boulder-config.json
+[config2]: https://github.com/letsencrypt/boulder/blob/master/test/issuer-ocsp-responder.json
+[hostsfile-ckbk]: https://github.com/customink-webops/hostsfile
