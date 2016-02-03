@@ -15,6 +15,11 @@ production purposes.
 
 ## Attributes
 
+|**Key**                                         | **Type**| **Description**                                 |
+|------------------------------------------------|---------|-------------------------------------------------|
+|`['boulder']['config']['boulder-config']`       | Hash    | Deep-merged into JSON config file of same name. |
+|`['boulder']['config']['issuer-ocsp-responder']`| Hash    | Deep-merged into JSON config file of same name. |
+
 <table>
   <tr>
     <th>Key</th>
