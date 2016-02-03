@@ -1,8 +1,9 @@
 # Let's Encrypt: Boulder cookbook
 
-This is a cookbook for provisioning [**Boulder**][], an
-[ACME-based][acme-spec] CA, written in Go. The Boulder application is an
-official effort of [Let's Encrypt project][letsencrypt].
+This is a cookbook for provisioning [Boulder][], an
+[ACME-based][acme-spec] certificate authority, written in Go. The
+Boulder application is an official effort of [Let's Encrypt
+project][letsencrypt].
 
 **Warning:** This cookbook was created for testing other cookbooks, not
 production purposes.
