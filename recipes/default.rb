@@ -1,6 +1,6 @@
 #
 # Author:: Thijs Houtenbos <thoutenbos@schubergphilis.com>
-# Cookbook:: acme_server
+# Cookbook:: chef-letsencrypt-boulder-server
 # Recipe:: default
 #
 # Copyright 2015 Schuberg Philis
@@ -33,7 +33,7 @@ else
 end
 
 node.default['mariadb']['use_default_repository'] = true
-node.default['mariadb']['install']['version'] = '10.0'
+node.default['mariadb']['install']['version'] = '10.1'
 
 include_recipe 'build-essential'
 include_recipe 'mariadb::server'
@@ -45,6 +45,12 @@ chef_gem 'rest-client' do
   compile_time false
 end
 
+hostsfile_entry '127.0.0.1' do
+  hostname 'localhost'
+  aliases ['boulder', 'boulder-rabbitmq', 'boulder-mysql']
+  action :create
+end
+
 boulderdir = "#{node['go']['gopath']}/src/github.com/letsencrypt/boulder"
 
 directory ::File.dirname boulderdir do
@@ -53,7 +59,7 @@ end
 
 git boulderdir do
   repository 'https://github.com/letsencrypt/boulder'
-  revision '8e6f13f189d7e7feb0f5407a9a9c63f3b644f730'
+  revision node['boulder']['revision']
   action :checkout
 end
 
@@ -80,14 +86,14 @@ end
 bash 'boulder_setup' do
   live_stream true
   cwd boulderdir
-  code 'source /etc/profile.d/golang.sh && ./test/setup.sh 2>&1 && touch setup.done'
+  code 'source /etc/profile.d/golang.sh && GO15VENDOREXPERIMENT=1 ./test/setup.sh 2>&1 && touch setup.done'
   creates "#{boulderdir}/setup.done"
 end
 
 bash 'run_boulder' do
   live_stream true
   cwd boulderdir
-  code 'source /etc/profile.d/golang.sh && screen -LdmS boulder ./start.py'
+  code 'source /etc/profile.d/golang.sh && GO15VENDOREXPERIMENT=1 screen -LdmS boulder ./start.py'
   not_if 'screen -list boulder | /bin/grep 1\ Socket\ in'
 end
 
