@@ -1,4 +1,4 @@
-name             'letsencrypt-boulder-server'
+name             'osl-letsencrypt-boulder-server'
 maintainer       'Thijs Houtenbos'
 maintainer_email 'thoutenbos@schubergphilis.com'
 license          'All rights reserved'
@@ -8,12 +8,13 @@ issues_url       'https://github.com/patcon/chef-letsencrypt-boulder-server/issu
 source_url       'https://github.com/patcon/chef-letsencrypt-boulder-server'
 version          '0.1.2'
 
-supports         'ubuntu', '= 14.04'
-supports         'centos', '~> 7'
+supports         'centos', '~> 6.0'
+supports         'centos', '~> 7.0'
 
 depends          'golang'
 depends          'rabbitmq'
 depends          'mariadb'
 depends          'build-essential'
+depends          'poise-python'
 depends          'yum'
 depends          'hostsfile'

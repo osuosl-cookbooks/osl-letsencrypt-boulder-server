@@ -40,6 +40,14 @@ include_recipe 'mariadb::server'
 include_recipe 'rabbitmq'
 include_recipe 'golang'
 
+start_cmd = ''
+
+if node['platform_version'].to_i < 7
+  python_runtime '2.7'
+
+  start_cmd = 'scl enable python27'
+end
+
 chef_gem 'rest-client' do
   action :install
   compile_time false
@@ -61,6 +69,10 @@ git boulderdir do
   repository 'https://github.com/letsencrypt/boulder'
   revision node['boulder']['revision']
   action :checkout
+end
+
+cookbook_file "#{boulderdir}/test/setup.sh" do
+  mode 0755
 end
 
 ruby_block 'boulder_config' do
@@ -93,7 +105,7 @@ end
 bash 'run_boulder' do
   live_stream true
   cwd boulderdir
-  code 'source /etc/profile.d/golang.sh && GO15VENDOREXPERIMENT=1 screen -LdmS boulder ./start.py'
+  code "source /etc/profile.d/golang.sh && GO15VENDOREXPERIMENT=1 screen -LdmS boulder #{start_cmd} ./start.py"
   not_if 'screen -list boulder | /bin/grep 1\ Socket\ in'
 end
 
