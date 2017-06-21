@@ -55,7 +55,7 @@ end
 
 hostsfile_entry '127.0.0.1' do
   hostname 'localhost'
-  aliases ['boulder', 'boulder-rabbitmq', 'boulder-mysql']
+  aliases ['boulder', 'boulder-rabbitmq', 'boulder-mysql'] + node['boulder']['host_aliases']
   action :create
 end
 

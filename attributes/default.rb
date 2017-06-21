@@ -19,6 +19,7 @@
 #
 
 default['boulder']['revision'] = '2d33a9900cafe82993744fe73bd341fe47df2171'
+default['boulder']['host_aliases'] = []
 
 default['boulder']['config']['boulder-config']['va']['portConfig']['httpPort'] = 80
 default['boulder']['config']['boulder-config']['va']['portConfig']['httpsPort'] = 443
