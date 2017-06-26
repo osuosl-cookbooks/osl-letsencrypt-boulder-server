@@ -1,3 +1,7 @@
+1.0.0 (2017-06-26)
+------------------
+- Cleanup and add support for CentOS 6
+
 # 0.1.2
 
 * Added more specific platform version specification.
