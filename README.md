@@ -3,15 +3,17 @@
 This is a cookbook for provisioning [Boulder][], an
 [ACME-based][acme-spec] certificate authority, written in Go. The
 Boulder application is an official effort of [Let's Encrypt
-project][letsencrypt].
+project][letsencrypt]. This particular cookbook is a fork of
+[letsencrypt-boulder-server](https://github.com/patcon/chef-letsencrypt-boulder-server)
+for use at the OSUOSL.
 
 **Warning:** This cookbook was created for testing other cookbooks, not
 production purposes.
 
 ## Supported Platforms
 
-* Ubuntu 14.04
-* Centos 7
+* CentOS 6
+* CentOS 7
 
 ## Attributes
 
