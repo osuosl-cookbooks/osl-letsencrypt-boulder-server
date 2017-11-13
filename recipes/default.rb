@@ -34,6 +34,7 @@ end
 
 node.default['mariadb']['use_default_repository'] = true
 node.default['mariadb']['install']['version'] = '10.1'
+node.default['go']['version'] = '1.7'
 
 include_recipe 'build-essential'
 include_recipe 'mariadb::server'
