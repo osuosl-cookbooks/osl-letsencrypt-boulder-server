@@ -7,7 +7,7 @@ describe 'osl-letsencrypt-boulder-server::default' do
         ChefSpec::SoloRunner.new(p).converge(described_recipe)
       end
       before do
-        stub_command('/usr/local/go/bin/go version | grep "go1.5 "')
+        stub_command('/usr/local/go/bin/go version | grep "go1.7 "')
         stub_command('screen -list boulder | /bin/grep 1\ Socket\ in')
       end
       it 'converges successfully' do
