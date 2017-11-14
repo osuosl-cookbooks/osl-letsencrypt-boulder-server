@@ -1,3 +1,7 @@
+1.0.1 (2017-11-14)
+------------------
+- Upgrade go version to 1.7
+
 1.0.0 (2017-06-26)
 ------------------
 - Cleanup and add support for CentOS 6
