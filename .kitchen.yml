@@ -6,3 +6,8 @@ suites:
   - name: default
     run_list:
       - recipe[osl-letsencrypt-boulder-server]
+      - recipe[boulder_test]
+    attributes:
+      boulder:
+        host_aliases:
+          - foo.org

@@ -1,0 +1,10 @@
+<% node['boulder']['host_aliases'].each do |host| -%>
+address=/<%= host %>/<%= node['ipaddress'] %>
+<% end -%>
+<% if node['platform_version'].to_i == 6 %>
+address=/boulder/127.0.0.1
+address=/boulder-rabbitmq/127.0.0.1
+address=/boulder-mysql/127.0.0.1
+<% end -%>
+no-resolv
+server=140.211.166.130

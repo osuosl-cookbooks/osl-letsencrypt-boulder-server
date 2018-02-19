@@ -16,53 +16,43 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
+# Keep containers up if the docker daemon is restarted
+package 'dnsmasq'
 
-package 'git'
-package 'screen'
-package 'initscripts'
-package 'logrotate'
-package 'tar'
-package 'wget'
-
-case node['platform']
-when 'ubuntu'
-  package 'libtool'
-else
-  package 'libtool-ltdl-devel'
+template '/etc/dnsmasq.conf' do
+  source 'dnsmasq.erb'
+  if node['platform_version'].to_i == 6
+    variables(
+      hosts: %w(boulder boulder-rabbitmq boulder-mysql) + node['boulder']['host_aliases']
+    )
+  else
+    variables(
+      hosts: node['boulder']['host_aliases']
+    )
+  end
+  notifies :restart, 'service[dnsmasq]', :immediately
 end
 
-node.default['mariadb']['use_default_repository'] = true
-node.default['mariadb']['install']['version'] = '10.1'
-node.default['go']['version'] = '1.7'
+service 'dnsmasq' do
+  action [:start, :enable]
+end
 
+node.default['resolver']['domain'] = 'example.org'
+node.default['resolver']['search'] = 'example.org'
+node.default['resolver']['nameservers'] = %w(127.0.0.1)
+
+include_recipe 'resolver'
+include_recipe 'git'
 include_recipe 'build-essential'
-include_recipe 'mariadb::server'
-include_recipe 'rabbitmq'
-include_recipe 'golang'
-
-start_cmd = ''
-
-if node['platform_version'].to_i < 7
-  python_runtime '2.7'
-
-  start_cmd = 'scl enable python27'
-end
 
 chef_gem 'rest-client' do
   action :install
   compile_time false
 end
 
-hostsfile_entry '127.0.0.1' do
-  hostname 'localhost'
-  aliases ['boulder', 'boulder-rabbitmq', 'boulder-mysql'] + node['boulder']['host_aliases']
-  action :create
-end
+boulderdir = node['boulder']['dir']
 
-boulderdir = "#{node['go']['gopath']}/src/github.com/letsencrypt/boulder"
-
-directory ::File.dirname boulderdir do
+directory boulderdir do
   recursive true
 end
 
@@ -72,17 +62,22 @@ git boulderdir do
   action :checkout
 end
 
-cookbook_file "#{boulderdir}/test/setup.sh" do
-  mode 0755
+if node['platform_version'].to_i == 6
+  include_recipe 'osl-letsencrypt-boulder-server::_legacy'
+  return
 end
+
+node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
+include_recipe 'osl-docker'
+include_recipe 'osl-docker::compose'
 
 ruby_block 'boulder_config' do
   block do
     node['boulder']['config'].keys.each do |filename|
-      config = ::JSON.parse ::File.read "#{boulderdir}/test/#{filename}.json"
-      ::File.write("#{boulderdir}/test/#{filename}.json.bak", ::JSON.pretty_generate(config))
+      config = ::JSON.parse ::File.read "#{boulderdir}/test/config/#{filename}.json"
+      ::File.write("#{boulderdir}/test/config/#{filename}.json.bak", ::JSON.pretty_generate(config))
       config = Chef::Mixin::DeepMerge.deep_merge(node['boulder']['config'][filename].to_hash, config)
-      ::File.write("#{boulderdir}/test/#{filename}.json", ::JSON.pretty_generate(config))
+      ::File.write("#{boulderdir}/test/config/#{filename}.json", ::JSON.pretty_generate(config))
     end
   end
 end
@@ -96,18 +91,18 @@ ruby_block 'boulder_limit' do
   end
 end
 
-bash 'boulder_setup' do
-  live_stream true
-  cwd boulderdir
-  code 'source /etc/profile.d/golang.sh && GO15VENDOREXPERIMENT=1 ./test/setup.sh 2>&1 && touch setup.done'
-  creates "#{boulderdir}/setup.done"
+ruby_block 'boulder_dns' do
+  block do
+    dns = ::YAML.load ::File.read "#{boulderdir}/docker-compose.yml"
+    dns['services']['boulder']['environment']['FAKE_DNS'] = node['ipaddress']
+    ::File.write("#{boulderdir}/docker-compose.yml", dns.to_yaml)
+  end
 end
 
-bash 'run_boulder' do
+execute '/usr/local/bin/docker-compose up -d' do
   live_stream true
   cwd boulderdir
-  code "source /etc/profile.d/golang.sh && GO15VENDOREXPERIMENT=1 screen -LdmS boulder #{start_cmd} ./start.py"
-  not_if 'screen -list boulder | /bin/grep 1\ Socket\ in'
+  only_if '/usr/local/bin/docker-compose ps -q | wc -l | grep 0'
 end
 
 ruby_block 'wait_for_bootstrap' do
@@ -120,7 +115,7 @@ ruby_block 'wait_for_bootstrap' do
         client = RestClient.get 'http://127.0.0.1:4000/directory'
       rescue
         sleep 10
-        puts ::File.read "#{boulderdir}/screenlog.0"
+        puts "Still waiting for boulder to start.. #{times * 10} seconds"
       end
       Chef::Application.fatal!('Failed to run boulder server') if times > 30
       break if client && client.code == 200
