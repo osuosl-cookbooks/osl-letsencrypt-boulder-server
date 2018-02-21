@@ -1,3 +1,7 @@
+2.0.0 (2018-02-21)
+------------------
+- Switch to using docker environment for boulder server to reduce converge times
+
 1.0.1 (2017-11-14)
 ------------------
 - Upgrade go version to 1.7

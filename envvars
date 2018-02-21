@@ -1,0 +1,4 @@
+cookbook=osl-letsencrypt-boulder-server
+version=1.0.1
+envs=*
+pr_link=https://github.com/osuosl-cookbooks/osl-letsencrypt-boulder-server/pull/2
