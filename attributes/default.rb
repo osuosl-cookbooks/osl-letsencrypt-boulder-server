@@ -17,15 +17,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-default['boulder']['revision'] = '2d33a9900cafe82993744fe73bd341fe47df2171'
 default['boulder']['host_aliases'] = []
-
-default['boulder']['config']['boulder-config']['va']['portConfig']['httpPort'] = 80
-default['boulder']['config']['boulder-config']['va']['portConfig']['httpsPort'] = 443
-default['boulder']['config']['boulder-config']['va']['portConfig']['tlsPort'] = 443
-default['boulder']['config']['boulder-config']['syslog']['network'] = 'udp'
-default['boulder']['config']['boulder-config']['syslog']['server'] = 'localhost:514'
-
-default['boulder']['config']['issuer-ocsp-responder']['syslog']['network'] = 'udp'
-default['boulder']['config']['issuer-ocsp-responder']['syslog']['server'] = 'localhost:514'
+if node['platform_version'].to_i >= 7
+  default['boulder']['dir'] = '/opt/boulder'
+  default['boulder']['revision'] = 'release-2018-02-13'
+  default['boulder']['config']['va']['va']['portConfig']['httpPort'] = 80
+  default['boulder']['config']['va']['va']['portConfig']['httpsPort'] = 443
+  default['boulder']['config']['va']['va']['portConfig']['tlsPort'] = 443
+else
+  default['boulder']['dir'] = "#{node['go']['gopath']}/src/github.com/letsencrypt/boulder"
+  default['boulder']['revision'] = '2d33a9900cafe82993744fe73bd341fe47df2171'
+  default['boulder']['config']['boulder-config']['va']['portConfig']['httpPort'] = 80
+  default['boulder']['config']['boulder-config']['va']['portConfig']['httpsPort'] = 443
+  default['boulder']['config']['boulder-config']['va']['portConfig']['tlsPort'] = 443
+  default['boulder']['config']['boulder-config']['syslog']['network'] = 'udp'
+  default['boulder']['config']['boulder-config']['syslog']['server'] = 'localhost:514'
+  default['boulder']['config']['issuer-ocsp-responder']['syslog']['network'] = 'udp'
+  default['boulder']['config']['issuer-ocsp-responder']['syslog']['server'] = 'localhost:514'
+end
