@@ -10,7 +10,7 @@ describe 'osl-letsencrypt-boulder-server::default' do
       end
       before do
         stub_command('/usr/local/bin/docker-compose ps -q | wc -l | grep 0').and_return(true)
-        stub_command('/usr/local/go/bin/go version | grep "go1.7 "')
+        stub_command('/usr/local/go/bin/go version | grep "go1.8 "')
         stub_command('screen -list boulder | /bin/grep 1\ Socket\ in')
       end
       it 'converges successfully' do
