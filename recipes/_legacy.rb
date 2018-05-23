@@ -2,7 +2,7 @@ package %w(screen initscripts logrotate tar wget libtool-ltdl-devel)
 
 node.default['mariadb']['use_default_repository'] = true
 node.default['mariadb']['install']['version'] = '10.1'
-node.default['go']['version'] = '1.7'
+node.default['go']['version'] = '1.8'
 
 include_recipe 'mariadb::server'
 include_recipe 'rabbitmq'
