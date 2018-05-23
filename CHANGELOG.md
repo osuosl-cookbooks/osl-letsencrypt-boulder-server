@@ -1,3 +1,7 @@
+2.0.1 (2018-05-23)
+------------------
+- Switch to using go-1.8 on legacy setup
+
 2.0.0 (2018-02-21)
 ------------------
 - Switch to using docker environment for boulder server to reduce converge times
