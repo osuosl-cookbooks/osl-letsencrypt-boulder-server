@@ -94,7 +94,11 @@ end
 ruby_block 'boulder_dns' do
   block do
     dns = ::YAML.load ::File.read "#{boulderdir}/docker-compose.yml"
-    dns['services']['boulder']['environment']['FAKE_DNS'] = node['ipaddress']
+    dns['services']['boulder']['environment']['FAKE_DNS'] = if node['boulder']['fake_dns_ip']
+                                                              node['boulder']['fake_dns_ip']
+                                                            else
+                                                              node['ipaddress']
+                                                            end
     ::File.write("#{boulderdir}/docker-compose.yml", dns.to_yaml)
   end
 end

@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 default['boulder']['host_aliases'] = []
+default['boulder']['fake_dns_ip'] = nil
 if node['platform_version'].to_i >= 7
   default['boulder']['dir'] = '/opt/boulder'
   default['boulder']['revision'] = 'release-2018-02-13'
