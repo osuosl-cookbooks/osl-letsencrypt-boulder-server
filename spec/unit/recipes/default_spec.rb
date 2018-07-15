@@ -42,7 +42,7 @@ describe 'osl-letsencrypt-boulder-server::default' do
       [
         /^domain example.org$/,
         /^search example.org$/,
-        /^nameserver 127.0.0.1$/
+        /^nameserver 127.0.0.1$/,
       ].each do |line|
         it do
           expect(chef_run).to render_file('/etc/resolv.conf').with_content(line)
