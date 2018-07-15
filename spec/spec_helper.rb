@@ -8,13 +8,7 @@ CENTOS_7 = {
   version: '7.2.1511',
 }.freeze
 
-CENTOS_6 = {
-  platform: 'centos',
-  version: '6.7',
-}.freeze
-
 ALL_PLATFORMS = [
-  CENTOS_6,
   CENTOS_7,
 ].freeze
 
