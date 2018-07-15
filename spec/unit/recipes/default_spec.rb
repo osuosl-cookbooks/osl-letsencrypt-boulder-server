@@ -5,7 +5,7 @@ describe 'osl-letsencrypt-boulder-server::default' do
     context "#{p[:platform]} #{p[:version]}" do
       cached(:chef_run) do
         ChefSpec::SoloRunner.new(p) do |node|
-          node.set['boulder']['host_aliases'] = %w(example.com foo.org)
+          node.normal['boulder']['host_aliases'] = %w(example.com foo.org)
         end.converge(described_recipe)
       end
       before do
