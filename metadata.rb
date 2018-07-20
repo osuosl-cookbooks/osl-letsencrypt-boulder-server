@@ -11,8 +11,6 @@ version          '2.0.1'
 
 supports         'centos', '~> 7.0'
 
-depends          'poise-python'
-depends          'yum'
 depends          'build-essential'
 depends          'git'
 depends          'osl-docker'
