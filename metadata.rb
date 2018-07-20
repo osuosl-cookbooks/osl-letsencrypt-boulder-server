@@ -9,7 +9,6 @@ issues_url       'https://github.com/osuosl-cookbooks/osl-letsencrypt-boulder-se
 source_url       'https://github.com/osuosl-cookbooks/osl-letsencrypt-boulder-server'
 version          '2.0.1'
 
-supports         'centos', '~> 6.0'
 supports         'centos', '~> 7.0'
 
 depends          'poise-python'
