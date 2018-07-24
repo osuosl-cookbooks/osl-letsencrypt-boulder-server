@@ -18,9 +18,7 @@
 # limitations under the License.
 # Keep containers up if the docker daemon is restarted
 
-if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 6
-  raise 'CentOS 6 is not supported!'
-end
+raise 'CentOS 6 is not supported!' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 6
 
 package 'dnsmasq'
 
