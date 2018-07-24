@@ -3,6 +3,11 @@ require 'chefspec/berkshelf'
 
 ChefSpec::Coverage.start! { add_filter 'osl-letsencrypt-boulder-server' }
 
+CENTOS_6 = {
+  platform: 'centos',
+  version: '6.7',
+}.freeze
+
 CENTOS_7 = {
   platform: 'centos',
   version: '7.2.1511',

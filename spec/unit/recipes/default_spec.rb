@@ -1,6 +1,14 @@
 require_relative '../../spec_helper'
 
 describe 'osl-letsencrypt-boulder-server::default' do
+  context "#{CENTOS_6[:platform]} #{CENTOS_6[:version]}" do
+    cached(:chef_run) do
+      ChefSpec::SoloRunner.new(CENTOS_6).converge(described_recipe)
+    end
+    it 'raises an error' do
+      expect { chef_run }.to raise_error(RuntimeError)
+    end
+  end
   ALL_PLATFORMS.each do |p|
     context "#{p[:platform]} #{p[:version]}" do
       cached(:chef_run) do
