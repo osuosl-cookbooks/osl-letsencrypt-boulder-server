@@ -19,7 +19,7 @@
 # Keep containers up if the docker daemon is restarted
 
 if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 6
-  Chef::Application.fatal!('CentOS 6 is not supported!')
+  raise 'CentOS 6 is not supported!'
 end
 
 package 'dnsmasq'
