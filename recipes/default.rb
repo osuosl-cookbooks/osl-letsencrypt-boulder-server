@@ -17,19 +17,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # Keep containers up if the docker daemon is restarted
+
+raise 'CentOS 6 is not supported!' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 6
+
 package 'dnsmasq'
 
 template '/etc/dnsmasq.conf' do
   source 'dnsmasq.erb'
-  if node['platform_version'].to_i == 6
-    variables(
-      hosts: %w(boulder boulder-rabbitmq boulder-mysql) + node['boulder']['host_aliases']
-    )
-  else
-    variables(
-      hosts: node['boulder']['host_aliases']
-    )
-  end
+  variables(
+    hosts: node['boulder']['host_aliases']
+  )
   notifies :restart, 'service[dnsmasq]', :immediately
 end
 
@@ -60,11 +57,6 @@ git boulderdir do
   repository 'https://github.com/letsencrypt/boulder'
   revision node['boulder']['revision']
   action :checkout
-end
-
-if node['platform_version'].to_i == 6
-  include_recipe 'osl-letsencrypt-boulder-server::_legacy'
-  return
 end
 
 node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
