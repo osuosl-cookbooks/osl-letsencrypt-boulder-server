@@ -107,7 +107,7 @@ ruby_block 'wait_for_bootstrap' do
         client = RestClient.get 'http://127.0.0.1:4000/directory'
       rescue
         sleep 10
-        puts "Still waiting for boulder to start.. #{times * 10} seconds"
+        print "\nStill waiting for boulder to start.. #{times * 10} seconds"
       end
       Chef::Application.fatal!('Failed to run boulder server') if times > 30
       break if client && client.code == 200
