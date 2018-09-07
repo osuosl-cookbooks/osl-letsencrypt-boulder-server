@@ -1,3 +1,7 @@
+3.0.1 (2018-09-07)
+------------------
+- Update boulder version
+
 3.0.0 (2018-08-10)
 ------------------
 - Chef 13 compatibility fixes
