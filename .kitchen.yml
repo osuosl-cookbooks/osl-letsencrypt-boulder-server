@@ -16,3 +16,5 @@ suites:
       boulder:
         host_aliases:
           - foo.org
+verifier:
+  name: inspec
