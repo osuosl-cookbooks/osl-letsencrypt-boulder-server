@@ -1,5 +1,5 @@
-describe command('curl http://localhost:4000/directory') do
-  its('stdout') { should match(%r{"new-cert": "http://(localhost|127.0.0.1):4000/acme/new-cert"}) }
+describe http('http://localhost:4000/directory', enable_remote_worker: true) do
+  its('body') { should match(%r{"new-cert": "http://(localhost|127.0.0.1):4000/acme/new-cert"}) }
 end
 
 describe command('curl https://foo.org -k -v') do

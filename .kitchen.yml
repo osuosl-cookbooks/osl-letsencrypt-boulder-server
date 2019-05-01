@@ -1,4 +1,6 @@
 ---
+verifier:
+  name: inspec
 driver:
   flavor_ref: 'm1.medium'
   attributes:
@@ -16,5 +18,3 @@ suites:
       boulder:
         host_aliases:
           - foo.org
-verifier:
-  name: inspec
