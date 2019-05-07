@@ -6,12 +6,3 @@ describe command('curl https://foo.org -k -v') do
   its('stderr') { should match(/issuer: CN=h[2a]ppy h[2a]cker fake CA/) }
   its('stderr') { should match(/common name: foo.org/) }
 end
-
-#describe http(
-#  'https://localhost',
-#  headers: { 'Hose' => 'foo.org' },
-#  enable_remote_worker: true, 
-#  ssl_verify: false
-#) do
-#  its('status') { should cmp 403 }
-#end
