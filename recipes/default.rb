@@ -40,7 +40,8 @@ node.default['resolver']['nameservers'] = %w(127.0.0.1)
 
 include_recipe 'resolver'
 include_recipe 'git'
-include_recipe 'build-essential'
+
+build_essential 'default'
 
 chef_gem 'rest-client' do
   action :install
