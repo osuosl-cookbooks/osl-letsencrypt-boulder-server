@@ -7,7 +7,7 @@ description      "Installs/Configures Boulder, the ACME-based CA server by Let's
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 issues_url       'https://github.com/osuosl-cookbooks/osl-letsencrypt-boulder-server/issues'
 source_url       'https://github.com/osuosl-cookbooks/osl-letsencrypt-boulder-server'
-version          '3.1.0'
+version          '3.1.1'
 
 supports         'centos', '~> 7.0'
 

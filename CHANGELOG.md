@@ -1,3 +1,7 @@
+3.1.1 (2019-10-28)
+------------------
+- Update boulder to revision release-2019-10-28
+
 3.1.0 (2019-09-16)
 ------------------
 - Chef 14 compatibility fixes
