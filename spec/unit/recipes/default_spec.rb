@@ -67,7 +67,7 @@ describe 'osl-letsencrypt-boulder-server::default' do
         expect(chef_run).to checkout_git('/opt/boulder')
           .with(
             repository: 'https://github.com/letsencrypt/boulder',
-            revision: 'release-2018-08-27'
+            revision: 'release-2019-10-28'
           )
       end
       it do

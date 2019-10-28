@@ -19,7 +19,7 @@
 #
 default['boulder']['host_aliases'] = []
 default['boulder']['dir'] = '/opt/boulder'
-default['boulder']['revision'] = 'release-2018-08-27'
+default['boulder']['revision'] = 'release-2019-10-28'
 default['boulder']['config']['va']['va']['portConfig']['httpPort'] = 80
 default['boulder']['config']['va']['va']['portConfig']['httpsPort'] = 443
 default['boulder']['config']['va']['va']['portConfig']['tlsPort'] = 443
