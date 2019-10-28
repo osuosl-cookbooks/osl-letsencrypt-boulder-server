@@ -1,4 +1,4 @@
-node.default['acme']['endpoint'] = 'http://127.0.0.1:4000'
+node.default['acme']['dir'] = 'http://127.0.0.1:4001/directory'
 include_recipe 'osl-acme'
 include_recipe 'osl-apache'
 include_recipe 'apache2::mod_ssl'
