@@ -1,7 +1,16 @@
 node.default['acme']['dir'] = 'http://127.0.0.1:4001/directory'
+node.default['osl-apache']['listen'] = %w(80 443)
+
 include_recipe 'osl-acme'
 include_recipe 'osl-apache'
-include_recipe 'apache2::mod_ssl'
+include_recipe 'osl-apache::mod_ssl'
+
+acme_selfsigned 'foo.org' do
+  crt '/etc/pki/tls/foo.org.crt'
+  chain '/etc/pki/tls/foo.org-chain.crt'
+  key '/etc/pki/tls/foo.org.key'
+  notifies :restart, 'service[apache2]', :immediately
+end
 
 apache_app 'foo.org' do
   directory '/var/www/foo.org/htdocs'
@@ -11,16 +20,8 @@ apache_app 'foo.org' do
   cert_chain '/etc/pki/tls/foo.org-chain.crt'
 end
 
-acme_selfsigned 'foo.org' do
-  crt '/etc/pki/tls/foo.org.crt'
-  chain '/etc/pki/tls/foo.org-chain.crt'
-  key '/etc/pki/tls/foo.org.key'
-  notifies :restart, 'service[apache2]', :immediately
-end
-
 acme_certificate 'foo.org' do
   crt '/etc/pki/tls/foo.org.crt'
-  chain '/etc/pki/tls/foo.org-chain.crt'
   key '/etc/pki/tls/foo.org.key'
   wwwroot '/var/www/foo.org/htdocs'
   notifies :restart, 'service[apache2]'
