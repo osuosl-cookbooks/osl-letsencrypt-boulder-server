@@ -64,32 +64,31 @@ node.override['osl-docker']['service'] = { misc_opts: '--live-restore' }
 include_recipe 'osl-docker'
 include_recipe 'osl-docker::compose'
 
-ruby_block 'boulder_config' do
-  block do
-    node['boulder']['config'].each_key do |filename|
-      config = ::JSON.parse ::File.read "#{boulderdir}/test/config/#{filename}.json"
-      ::File.write("#{boulderdir}/test/config/#{filename}.json.bak", ::JSON.pretty_generate(config))
-      config = Chef::Mixin::DeepMerge.deep_merge(node['boulder']['config'][filename].to_hash, config)
-      ::File.write("#{boulderdir}/test/config/#{filename}.json", ::JSON.pretty_generate(config))
-    end
-  end
+template "#{boulderdir}/test/config/va.json" do
+  source 'va.json.erb'
+  mode '644'
+  variables(
+    httpPort: node['boulder']['config']['va']['va']['portConfig']['httpPort'],
+    httpsPort: node['boulder']['config']['va']['va']['portConfig']['httpsPort'],
+    tlsPort: node['boulder']['config']['va']['va']['portConfig']['tlsPort']
+  )
 end
 
-ruby_block 'boulder_limit' do
-  block do
-    limit = ::YAML.load ::File.read "#{boulderdir}/test/rate-limit-policies.yml"
-    limit['certificatesPerName']['threshold'] = 999
-    limit['pendingAuthorizationsPerAccount']['threshold'] = 99
-    ::File.write("#{boulderdir}/test/rate-limit-policies.yml", limit.to_yaml)
-  end
+template "#{boulderdir}/test/rate-limit-policies.yml" do
+  source 'rate-limit-policies.yml.erb'
+  mode '644'
+  variables(
+    certsPerName: 999,
+    pendingAuthPerAcct: 99
+  )
 end
 
-ruby_block 'boulder_dns' do
-  block do
-    dns = ::YAML.load ::File.read "#{boulderdir}/docker-compose.yml"
-    dns['services']['boulder']['environment']['FAKE_DNS'] = node['ipaddress']
-    ::File.write("#{boulderdir}/docker-compose.yml", dns.to_yaml)
-  end
+template "#{boulderdir}/docker-compose.yml" do
+  source 'docker-compose.yml.erb'
+  mode '644'
+  variables(
+    fakedns: node['ipaddress']
+  )
 end
 
 execute '/usr/local/bin/docker-compose up -d' do
@@ -98,20 +97,8 @@ execute '/usr/local/bin/docker-compose up -d' do
   only_if '/usr/local/bin/docker-compose ps -q | wc -l | grep 0'
 end
 
-ruby_block 'wait_for_bootstrap' do
-  block do
-    require 'rest-client'
-    times = 0
-    loop do
-      times += 1
-      begin
-        client = RestClient.get 'http://127.0.0.1:4000/directory'
-      rescue
-        sleep 10
-        print "\nStill waiting for boulder to start.. #{times * 10} seconds"
-      end
-      raise('Failed to run boulder server') if times > 30
-      break if client && client.code == 200
-    end
-  end
+execute 'wait_for_bootstrap' do
+  command 'while [[ ! $(curl -s -o /dev/nulll -w "%{http_code}" localhost:4000/directory) -eq "200" ]]; do sleep 10; done' 
+  not_if '[[ $(curl -s -o /dev/nulll -w "%{http_code}" localhost:4000/directory) -eq "200" ]]'
+  timeout 3000
 end
