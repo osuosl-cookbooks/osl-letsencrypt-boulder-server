@@ -19,6 +19,7 @@ describe 'osl-letsencrypt-boulder-server::default' do
       before do
         stub_command('/usr/local/bin/docker-compose ps -q | wc -l | grep 0').and_return(true)
         stub_command('screen -list boulder | /bin/grep 1\ Socket\ in')
+        stub_command('[[ $(curl -s -o /dev/null -w "%{http_code}" localhost:4000/directory) -eq "200" ]]').and_return(true)
       end
       it 'converges successfully' do
         expect { chef_run }.to_not raise_error
@@ -73,11 +74,31 @@ describe 'osl-letsencrypt-boulder-server::default' do
       it do
         expect(chef_run).to create_docker_service('default').with(misc_opts: '--live-restore')
       end
-      %w(boulder_config boulder_limit boulder_dns wait_for_bootstrap).each do |rb|
+
+      [ /"httpPort": 80/,
+        /"httpsPort": 443/,
+        /"tlsPort": 443/,
+      ].each do |line|
         it do
-          expect(chef_run).to run_ruby_block(rb)
+          expect(chef_run).to render_file('/opt/boulder/test/config/va.json').with_content(line)
         end
       end
+
+      [
+        /certificatesPerName:\n.+\n\s+threshold: 999/,
+        /pendingAuthorizationsPerAccount:\n.+\n\s+threshold: 99/,
+      ].each do |line|
+        it do
+          expect(chef_run).to render_file('/opt/boulder/test/rate-limit-policies.yml').with_content(line)
+        end
+      end
+
+      it do
+        expect(chef_run).to render_file('/opt/boulder/docker-compose.yml').with_content(
+          /FAKE_DNS: 10.0.0.2/
+        )
+      end
+
       it do
         expect(chef_run).to run_execute('/usr/local/bin/docker-compose up -d')
           .with(

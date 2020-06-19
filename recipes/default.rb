@@ -98,7 +98,7 @@ execute '/usr/local/bin/docker-compose up -d' do
 end
 
 execute 'wait_for_bootstrap' do
-  command 'while [[ ! $(curl -s -o /dev/nulll -w "%{http_code}" localhost:4000/directory) -eq "200" ]]; do sleep 10; done' 
-  not_if '[[ $(curl -s -o /dev/nulll -w "%{http_code}" localhost:4000/directory) -eq "200" ]]'
+  command 'while [[ ! $(curl -s -o /dev/null -w "%{http_code}" localhost:4000/directory) -eq "200" ]]; do sleep 10; done'
+  not_if '[[ $(curl -s -o /dev/null -w "%{http_code}" localhost:4000/directory) -eq "200" ]]'
   timeout 3000
 end
