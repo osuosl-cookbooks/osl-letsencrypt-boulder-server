@@ -4,7 +4,7 @@ source 'https://supermarket.chef.io'
 
 cookbook 'base', git: 'git@github.com:osuosl-cookbooks/base'
 cookbook 'munin', git: 'git@github.com:osuosl-cookbooks/munin'
-cookbook 'osl-acme', git: 'git@github.com:osuosl-cookbooks/osl-acme', branch: 'detjensrobert/chef15'
+cookbook 'osl-acme', git: 'git@github.com:osuosl-cookbooks/osl-acme
 cookbook 'osl-apache', git: 'git@github.com:osuosl-cookbooks/osl-apache'
 cookbook 'osl-munin', git: 'git@github.com:osuosl-cookbooks/osl-munin'
 cookbook 'osl-git', git: 'git@github.com:osuosl-cookbooks/osl-git'
