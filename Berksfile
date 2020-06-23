@@ -2,10 +2,12 @@ solver :ruby, :required
 
 source 'https://supermarket.chef.io'
 
+cookbook 'base', git: 'git@github.com:osuosl-cookbooks/base'
 cookbook 'munin', git: 'git@github.com:osuosl-cookbooks/munin'
 cookbook 'osl-acme', git: 'git@github.com:osuosl-cookbooks/osl-acme', branch: 'detjensrobert/chef15'
 cookbook 'osl-apache', git: 'git@github.com:osuosl-cookbooks/osl-apache'
 cookbook 'osl-munin', git: 'git@github.com:osuosl-cookbooks/osl-munin'
+cookbook 'osl-git', git: 'git@github.com:osuosl-cookbooks/osl-git'
 cookbook 'osl-nrpe', git: 'git@github.com:osuosl-cookbooks/osl-nrpe'
 cookbook 'osl-rsync', git: 'git@github.com:osuosl-cookbooks/osl-rsync'
 cookbook 'osl-php', git: 'git@github.com:osuosl-cookbooks/osl-php'
