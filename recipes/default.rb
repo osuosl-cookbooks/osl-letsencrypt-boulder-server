@@ -3,7 +3,7 @@
 # Cookbook:: chef-letsencrypt-boulder-server
 # Recipe:: default
 #
-# Copyright 2015 Schuberg Philis
+# Copyright:: 2015-2020, Schuberg Philis
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 # limitations under the License.
 # Keep containers up if the docker daemon is restarted
 
-raise 'CentOS 6 is not supported!' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 6
+raise 'CentOS 6 is not supported!' if platform_family?('rhel') && node['platform_version'].to_i == 6
 
 package 'dnsmasq'
 
@@ -66,7 +66,7 @@ include_recipe 'osl-docker::compose'
 
 ruby_block 'boulder_config' do
   block do
-    node['boulder']['config'].keys.each do |filename|
+    node['boulder']['config'].each_key do |filename|
       config = ::JSON.parse ::File.read "#{boulderdir}/test/config/#{filename}.json"
       ::File.write("#{boulderdir}/test/config/#{filename}.json.bak", ::JSON.pretty_generate(config))
       config = Chef::Mixin::DeepMerge.deep_merge(node['boulder']['config'][filename].to_hash, config)
@@ -110,7 +110,7 @@ ruby_block 'wait_for_bootstrap' do
         sleep 10
         print "\nStill waiting for boulder to start.. #{times * 10} seconds"
       end
-      Chef::Application.fatal!('Failed to run boulder server') if times > 30
+      raise('Failed to run boulder server') if times > 30
       break if client && client.code == 200
     end
   end
