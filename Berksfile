@@ -14,6 +14,6 @@ cookbook 'osl-php', git: 'git@github.com:osuosl-cookbooks/osl-php'
 cookbook 'osl-selinux', git: 'git@github.com:osuosl-cookbooks/osl-selinux'
 cookbook 'boulder_test', path: 'test/cookbooks/boulder_test'
 cookbook 'firewall', git: 'git@github.com:osuosl-cookbooks/firewall'
-cookbook 'osl-docker', git: 'git@github.com:osuosl-cookbooks/osl-docker', branch: 'detjensrobert/chef15'
+cookbook 'osl-docker', git: 'git@github.com:osuosl-cookbooks/osl-docker'
 
 metadata
