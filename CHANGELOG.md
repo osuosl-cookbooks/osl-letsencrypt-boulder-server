@@ -1,3 +1,7 @@
+3.2.0 (2020-06-24)
+------------------
+- Chef 15 compatibility fixes
+
 3.1.1 (2019-10-28)
 ------------------
 - Update boulder to revision release-2019-10-28
