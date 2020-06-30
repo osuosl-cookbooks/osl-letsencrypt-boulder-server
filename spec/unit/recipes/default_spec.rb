@@ -24,7 +24,7 @@ describe 'osl-letsencrypt-boulder-server::default' do
         expect { chef_run }.to_not raise_error
       end
       it do
-        expect(chef_run).to install_package('dnsmasq')
+        expect(chef_run).to install_package('dnsmasq, curl')
       end
       it do
         expect(chef_run).to create_template('/etc/dnsmasq.conf').with(source: 'dnsmasq.erb')

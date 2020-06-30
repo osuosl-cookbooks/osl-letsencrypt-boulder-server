@@ -20,7 +20,7 @@
 
 raise 'CentOS 6 is not supported!' if platform_family?('rhel') && node['platform_version'].to_i == 6
 
-package 'dnsmasq'
+package %w(dnsmasq curl)
 
 template '/etc/dnsmasq.conf' do
   source 'dnsmasq.erb'
